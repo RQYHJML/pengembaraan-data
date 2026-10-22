@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pengembara Data — Matematik Tahun 1</title>
+<style>
+:root{--ink:#19345b;--blue:#69d3ff;--green:#49c96a;--gold:#ffc928;--cream:#fff8dc}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:linear-gradient(#7ddcff,#d8f8ff 58%,#91e88a);min-height:100vh}
+button,input,select{font:inherit}button{cursor:pointer;border:0;border-radius:14px;padding:11px 16px;font-weight:800;box-shadow:0 4px 0 #18365b33;transition:transform .08s}button:active{transform:translateY(2px);box-shadow:0 2px 0 #18365b33}
+.primary{background:#3cc85a;color:white}.secondary{background:#fff;color:var(--ink)}.gold{background:var(--gold);color:#513c00}
+.wrap{max-width:1100px;margin:auto;padding:14px}.panel{background:#fffdf1;border:4px solid white;border-radius:24px;box-shadow:0 9px 0 #214e7330;padding:22px}
+h1,h2,p{margin-top:0}h1{font-size:clamp(2rem,6vw,4rem);line-height:.98;margin-bottom:10px;color:#174a91;text-shadow:3px 3px #fff,5px 6px #ffc928}
+.subtitle{font-weight:900;letter-spacing:.08em;color:#b94b21}.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:18px;align-items:center;margin:3vh auto}
+.mascot{font-size:clamp(90px,18vw,180px);text-align:center;filter:drop-shadow(0 8px 0 #285b7c30);animation:bob 2s infinite ease-in-out}@keyframes bob{50%{transform:translateY(-10px)}}
+label{display:block;font-weight:800;margin:12px 0 5px}input,select{width:100%;padding:12px;border:2px solid #b8d9e9;border-radius:12px;background:white}
+.small{font-size:.92rem;color:#42617d}.hidden{display:none!important}
+.hud{display:flex;gap:8px;flex-wrap:wrap;align-items:center;justify-content:space-between;background:#14375e;color:white;border:3px solid #fff;border-radius:16px;padding:10px 14px;margin-bottom:10px;font-weight:900}
+.hud span{white-space:nowrap}.gamebox{position:relative;border:5px solid white;border-radius:22px;overflow:hidden;background:#8be1ff;box-shadow:0 8px 0 #214e7330}
+canvas{display:block;width:100%;height:auto;image-rendering:pixelated;touch-action:pan-y}
+.gamehelp{display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.controls{display:flex;gap:8px}.controls button{min-width:58px;font-size:1.3rem;background:#fff}
+.question{position:absolute;inset:0;background:#15375ed9;display:flex;align-items:center;justify-content:center;padding:12px}
+.qcard{width:min(600px,100%);background:#fffdf1;border:5px solid white;border-radius:22px;padding:20px;box-shadow:0 8px 0 #0002;max-height:95%;overflow:auto}
+.qnum{display:inline-block;background:#ffc928;border-radius:10px;padding:5px 10px;font-weight:900}
+.data{background:white;border-radius:12px;padding:10px;margin:12px 0;border:2px solid #d2e5f1}
+.data table{border-collapse:collapse;width:100%;text-align:center}.data td,.data th{border:1px solid #9ebbd0;padding:6px}.bars{display:flex;gap:12px;align-items:end;justify-content:space-around;height:100px;padding:8px}.barcol{display:flex;flex-direction:column;align-items:center;font-size:.8rem;gap:3px}.bar{width:30px;background:#43b7ed;border:2px solid #2177a6;border-radius:6px 6px 0 0}
+.answers{display:grid;grid-template-columns:1fr;gap:8px}.answers button{text-align:left;background:#eaf7ff;color:#17395b;border:2px solid #b5d9ec;box-shadow:none}.answers button:hover{background:#d7f5c9}
+.feedback{font-weight:900;padding:10px;border-radius:10px;margin:10px 0}.good{background:#d9ffdb;color:#176b2b}.bad{background:#ffe0e0;color:#9c2020}
+.result{text-align:center}.scorebig{font-size:2.4rem;font-weight:1000;color:#1559a7}.certificate{background:#fff9e5;border:9px double #e3ad27;border-radius:12px;padding:26px;margin:16px auto;max-width:760px;color:#263b67}
+.certificate h2{font-size:2rem;color:#174a91}.certname{font-size:1.8rem;font-weight:900;border-bottom:2px solid #d9b34c;display:inline-block;padding:6px 18px}
+footer{text-align:center;padding:18px;font-size:.82rem;color:#2c607a}
+@media(max-width:720px){.hero{grid-template-columns:1fr}.mascot{font-size:100px}.panel{padding:16px}.gamehelp{align-items:stretch}.controls{width:100%;justify-content:center}.controls button{flex:1}.hud{font-size:.9rem}.certificate{padding:14px}}
+@media print{body{background:white}.no-print,#start,#game,#resultActions,footer{display:none!important}#certificateScreen{display:block!important}.certificate{box-shadow:none;margin:0 auto}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<section id="start" class="hero">
+  <div class="panel">
+    <div class="subtitle">🎮 MISI MATEMATIK TAHUN 1</div>
+    <h1>PENGEMBARA<br>DATA</h1>
+    <p>Teroka dunia ajaib, kumpul syiling emas, jawab soalan dan buka laluan ke istana!</p>
+    <label for="student">Nama murid</label><input id="student" placeholder="Taip nama murid" maxlength="60">
+    <label for="klass">Kelas</label><select id="klass"><option value="">Pilih kelas</option><option>1 ADAB</option><option>1 AJWAD</option><option>1 AKRAB</option><option>1 AMANAH</option><option>1 BESTARI</option><option>Lain-lain</option></select>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:18px"><button class="primary" id="startBtn">▶ MULA PENGEMBARAAN</button><button class="secondary" id="soundBtn">🔊 Audio: ON</button></div>
+    <p class="small" style="margin:14px 0 0">Kawalan: ← → atau A/D untuk bergerak · Space/↑ untuk melompat. Pada skrin sentuh, guna butang kawalan.</p>
+  </div>
+  <div class="mascot" aria-label="Pengembara">🧑‍🚀</div>
+</section>
+
+<section id="game" class="hidden">
+  <div class="hud"><span>🪙 Syiling: <b id="coins">0</b></span><span>❤️ Nyawa: <b id="lives">3</b></span><span>⭐ Markah: <b id="score">0</b>/50</span><span>📘 Soalan: <b id="progress">0</b>/10</span></div>
+  <div class="gamebox">
+    <canvas id="world" width="960" height="440" aria-label="Permainan platformer"></canvas>
+    <div id="questionLayer" class="question hidden"><div class="qcard"><div class="qnum" id="qnum">SOALAN 1/10</div><h2 id="qtitle" style="margin:12px 0 4px"></h2><div id="qdata" class="data"></div><div id="answers" class="answers"></div><div id="feedback" aria-live="polite"></div><button id="continueBtn" class="primary hidden" style="margin-top:10px">TERUSKAN ➜</button></div></div>
+  </div>
+  <div class="gamehelp"><div><b>Petunjuk:</b> Sentuh blok <b>?</b> untuk menjawab. Jawapan betul = +5 markah. Jawapan salah = −1 nyawa.</div><div class="controls"><button id="leftBtn" aria-label="Gerak kiri">⬅️</button><button id="jumpBtn" aria-label="Lompat">⬆️ LOMPAT</button><button id="rightBtn" aria-label="Gerak kanan">➡️</button></div></div>
+  <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="secondary" id="pauseBtn">⏸ Jeda</button><button class="secondary" id="muteBtn">🔊 Audio: ON</button></div>
+</section>
+
+<section id="result" class="panel result hidden">
+  <div class="mascot" style="font-size:90px">🏆</div><h1 style="font-size:clamp(2rem,5vw,3.5rem)">TAHNIAH, PENGEMBARA!</h1>
+  <p>Anda telah menamatkan misi Pengembara Data!</p><div class="scorebig" id="finalScore">0/50</div>
+  <p id="resultDetails"></p><div id="resultActions" style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="primary" id="makeCert">📜 JANA SIJIL</button><button class="secondary" id="replayBtn">🔄 MAIN SEMULA</button></div>
+</section>
+
+<section id="certificateScreen" class="hidden">
+ <div class="certificate" id="certificate">
+  <div style="font-size:2.5rem">⭐ 🪙 🏰 ⭐</div><div class="subtitle">SIJIL PENCAPAIAN</div><h2>SIJIL PENGEMBARA DATA</h2>
+  <p>Dengan ini disahkan bahawa</p><div class="certname" id="certName">Nama Murid</div>
+  <p style="margin-top:12px">Kelas: <b id="certClass"></b></p>
+  <p>telah menyertai permainan pembelajaran</p><h3>MATEMATIK TAHUN 1 — TOPIK DATA</h3>
+  <p>dan berjaya memperoleh markah</p><div class="scorebig" id="certScore">0/50</div>
+  <p id="certExtras"></p><p id="certDate"></p>
+  <div style="display:flex;justify-content:space-between;gap:25px;margin-top:38px;text-align:center"><div>____________________<br>Guru</div><div>🌟 Pengembara Cemerlang 🌟</div></div>
+ </div><div class="no-print" style="text-align:center;display:flex;gap:8px;justify-content:center;flex-wrap:wrap"><button class="primary" onclick="window.print()">🖨 CETAK / SIMPAN PDF</button><button class="secondary" id="backResult">Kembali ke keputusan</button></div>
+</section>
+<footer>Pengembara Data · Permainan pembelajaran Matematik Tahun 1 · Audio chiptune dijana secara asli</footer>
+</div>
+<script>
+(()=>{
+const $=id=>document.getElementById(id);
+const questions=[
+{title:"Buah apakah yang paling digemari murid?",data:[["Epal",4],["Pisang",6],["Oren",3]],opts:["Epal","Pisang","Oren"],ans:1,why:"Pisang mempunyai bilangan paling banyak, iaitu 6 orang."},
+{title:"Berapakah bilangan arnab?",data:[["Kucing",5],["Arnab",2],["Ikan",4]],opts:["2","4","5"],ans:0,why:"Terdapat 2 ekor arnab."},
+{title:"Alat tulis manakah paling sedikit?",data:[["Pensel",7],["Pemadam",3],["Pembaris",5]],opts:["Pensel","Pemadam","Pembaris"],ans:1,why:"Pemadam mempunyai bilangan paling sedikit, iaitu 3."},
+{title:"Berapakah bilangan murid yang memilih warna biru?",data:[["Merah",4],["Biru",6],["Kuning",2]],opts:["2","4","6"],ans:2,why:"Seramai 6 orang memilih warna biru."},
+{title:"Berapakah jumlah bas dan motosikal?",data:[["Kereta",5],["Bas",3],["Motosikal",4]],opts:["7","8","9"],ans:1,why:"3 + 4 = 7. Pilih jawapan yang betul: 7.",fix:true},
+{title:"Berapakah beza murid yang memilih nasi goreng dengan roti?",data:[["Nasi goreng",6],["Roti",3],["Mi",5]],opts:["2","3","4"],ans:1,why:"6 − 3 = 3 orang."},
+{title:"Siapakah yang membaca paling banyak buku?",data:[["Ali",3],["Siti",5],["Kumar",4]],opts:["Ali","Siti","Kumar"],ans:1,why:"Siti membaca 5 buah buku, paling banyak."},
+{title:"Aktiviti manakah mempunyai bilangan kedua terbanyak?",data:[["Bola sepak",7],["Badminton",4],["Berlari",6]],opts:["Bola sepak","Badminton","Berlari"],ans:2,why:"Berlari mempunyai 6 orang, kedua terbanyak."},
+{title:"Bunga apakah yang mempunyai bilangan sama?",data:[["Mawar",4],["Bunga raya",4],["Orkid",2]],opts:["Mawar dan bunga raya","Mawar dan orkid","Bunga raya dan orkid"],ans:0,why:"Mawar dan bunga raya masing-masing berjumlah 4."},
+{title:"Pada hari apakah bilangan murid hadir paling ramai?",data:[["Isnin",20],["Selasa",18],["Rabu",20]],opts:["Isnin sahaja","Selasa sahaja","Isnin dan Rabu"],ans:2,why:"Isnin dan Rabu masing-masing mempunyai 20 murid."}
+];
+// Correct Q5 is total 3+4=7. Keep answers mathematically accurate.
+questions[4].opts=["7","8","9"]; questions[4].ans=0; questions[4].why="3 + 4 = 7 kenderaan.";
+const canvas=$("world"),ctx=canvas.getContext("2d");
+let student="",klass="",score=0,coins=0,lives=3,index=0,answered=[],paused=false,activeQ=-1,gameOver=false,muted=false,audioCtx=null,raf=0,last=0,camera=0;
+const W=960,H=440,worldW=3500,ground=370;
+let player={x:55,y:300,w:30,h:43,vx:0,vy:0,onGround:false,face:1};
+let coinItems=[],blocks=[],platforms=[],keys={left:false,right:false};
+function makeWorld(){platforms=[{x:0,y:ground,w:650,h:80},{x:700,y:ground-50,w:250,h:130},{x:1000,y:ground,w:350,h:90},{x:1410,y:ground-65,w:250,h:145},{x:1710,y:ground,w:300,h:100},{x:2070,y:ground-45,w:300,h:125},{x:2430,y:ground,w:330,h:100},{x:2800,y:ground-55,w:260,h:135},{x:3110,y:ground,w:390,h:90},{x:180,y:270,w:120,h:18},{x:480,y:240,w:110,h:18},{x:830,y:240,w:100,h:18},{x:1120,y:260,w:110,h:18},{x:1510,y:225,w:100,h:18},{x:1840,y:260,w:100,h:18},{x:2200,y:230,w:110,h:18},{x:2550,y:250,w:100,h:18},{x:2910,y:220,w:110,h:18}];
+blocks=Array.from({length:10},(_,i)=>({x:250+i*315,y:[235,220,260,210,245,225,250,220,245,220][i],w:34,h:34,q:i,hit:false}));
+coinItems=[];for(let i=0;i<42;i++){coinItems.push({x:140+i*78,y: i%4===0?210:300-(i%3)*28,r:10,got:false})}
+player={x:55,y:ground-50,w:30,h:43,vx:0,vy:0,onGround:false,face:1};camera=0}
+function sound(type){if(muted)return;try{audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==="suspended")audioCtx.resume();let now=audioCtx.currentTime;let seq=type==="coin"?[880,1320]:type==="jump"?[300,500]:type==="good"?[523,659,784,1046]:type==="bad"?[220,180]:type==="win"?[523,659,784,1046,1318]:[440];seq.forEach((f,i)=>{let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type="square";o.frequency.value=f;g.gain.setValueAtTime(.0001,now+i*.085);g.gain.exponentialRampToValueAtTime(.08,now+i*.085+.01);g.gain.exponentialRampToValueAtTime(.0001,now+i*.085+.12);o.connect(g);g.connect(audioCtx.destination);o.start(now+i*.085);o.stop(now+i*.085+.13)})}catch(e){}}
+function rounded(x,y,w,h,r,color){ctx.fillStyle=color;ctx.beginPath();ctx.roundRect(x,y,w,h,r);ctx.fill()}
+function draw(){ctx.clearRect(0,0,W,H);let sky=ctx.createLinearGradient(0,0,0,H);sky.addColorStop(0,"#66cfff");sky.addColorStop(1,"#d4f8ff");ctx.fillStyle=sky;ctx.fillRect(0,0,W,H);
+ // clouds / hills
+ for(let i=0;i<8;i++){let x=((i*170-camera*.22)%(W+180)+W+180)%(W+180)-70;ctx.fillStyle="#ffffffd9";ctx.beginPath();ctx.arc(x,65+(i%3)*23,25,0,7);ctx.arc(x+25,56+(i%3)*23,32,0,7);ctx.arc(x+53,67+(i%3)*23,22,0,7);ctx.fill()}
+ for(let i=0;i<9;i++){let x=i*145-camera*.12;ctx.fillStyle=i%2?"#8bdc91":"#6fcf7c";ctx.beginPath();ctx.ellipse(x,335,105,100,0,Math.PI,Math.PI*2);ctx.fill()}
+ // castle at end
+ let cx=worldW-250-camera;if(cx>-180&&cx<W+100){ctx.fillStyle="#e6e9f5";ctx.fillRect(cx,245,145,125);ctx.fillStyle="#b85d58";ctx.beginPath();ctx.moveTo(cx-10,245);ctx.lineTo(cx+20,195);ctx.lineTo(cx+50,245);ctx.fill();ctx.beginPath();ctx.moveTo(cx+95,245);ctx.lineTo(cx+125,185);ctx.lineTo(cx+155,245);ctx.fill();ctx.fillStyle="#8054a4";ctx.fillRect(cx+55,290,35,80);ctx.fillStyle="#ffd55c";ctx.fillRect(cx+70,205,7,20);ctx.fillStyle="#fff";ctx.fillRect(cx+25,270,18,20);ctx.fillRect(cx+110,270,18,20)}
+ // ground/platforms
+ platforms.forEach(p=>{let x=p.x-camera;if(x+p.w<0||x>W)return;ctx.fillStyle="#8b5837";ctx.fillRect(x,p.y,p.w,p.h);ctx.fillStyle="#4acb57";ctx.fillRect(x,p.y,p.w,12);ctx.fillStyle="#36ad48";for(let j=0;j<p.w;j+=30){ctx.fillRect(x+j,p.y+9,17,4)}ctx.fillStyle="#a96e45";for(let j=10;j<p.w;j+=48)ctx.fillRect(x+j,p.y+30,22,18)});
+ // coins
+ coinItems.forEach(c=>{if(c.got)return;let x=c.x-camera;if(x<-20||x>W+20)return;ctx.fillStyle="#f6a900";ctx.beginPath();ctx.ellipse(x,c.y,10,13,0,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#fff17a";ctx.lineWidth=3;ctx.stroke();ctx.fillStyle="#fff6b0";ctx.fillRect(x-2,c.y-7,3,14)});
+ // blocks
+ blocks.forEach(b=>{let x=b.x-camera;if(x<-40||x>W+40)return;rounded(x,b.y,b.w,b.h,5,b.hit?"#a66d43":"#f7a928");ctx.strokeStyle="#fff0a3";ctx.lineWidth=3;ctx.strokeRect(x+3,b.y+3,b.w-6,b.h-6);ctx.fillStyle=b.hit?"#704b30":"#fff";ctx.font="bold 27px system-ui";ctx.textAlign="center";ctx.fillText(b.hit?"✓":"?",x+b.w/2,b.y+27)});
+ // player
+ let px=player.x-camera,py=player.y;ctx.save();ctx.translate(px+player.w/2,py+player.h/2);if(player.face<0)ctx.scale(-1,1);ctx.fillStyle="#1e4c7a";ctx.beginPath();ctx.ellipse(0,14,13,10,0,0,Math.PI*2);ctx.fill();ctx.fillStyle="#e9b67b";ctx.fillRect(-11,-8,22,24);ctx.fillStyle="#d84d39";ctx.fillRect(-12,-17,24,8);ctx.fillStyle="#7a3f24";ctx.fillRect(-14,-22,28,7);ctx.fillStyle="#f0c89b";ctx.beginPath();ctx.arc(0,-13,10,0,Math.PI*2);ctx.fill();ctx.fillStyle="#244b70";ctx.fillRect(2,-15,3,4);ctx.fillStyle="#4d8a45";ctx.fillRect(-12,-4,5,17);ctx.fillStyle="#253c59";ctx.fillRect(-9,18,7,7);ctx.fillRect(3,18,7,7);ctx.restore();
+ // flag / sign
+ let fx=3250-camera;if(fx>0&&fx<W){ctx.fillStyle="#7d4d30";ctx.fillRect(fx,ground-70,7,70);ctx.fillStyle="#ff4d5d";ctx.beginPath();ctx.moveTo(fx+7,ground-70);ctx.lineTo(fx+55,ground-57);ctx.lineTo(fx+7,ground-43);ctx.fill()}
+ ctx.textAlign="left";ctx.font="bold 14px system-ui";ctx.fillStyle="#163c5a";ctx.fillText("KUMPUL SYILING • SENTUH BLOK ?",18,24)
+}
+function physics(dt){if(paused||activeQ>=0||gameOver)return;let speed=220;player.vx=(keys.right?1:0)-(keys.left?1:0);player.vx*=speed;if(player.vx)player.face=Math.sign(player.vx);player.x+=player.vx*dt;player.x=Math.max(0,Math.min(worldW-player.w,player.x));player.vy+=1050*dt;player.y+=player.vy*dt;player.onGround=false;
+ platforms.forEach(p=>{if(player.x+player.w>p.x&&player.x<p.x+p.w&&player.y+player.h>=p.y&&player.y+player.h<=p.y+22&&player.vy>=0){player.y=p.y-player.h;player.vy=0;player.onGround=true}});
+ if(player.y>H+150){lives--;updateHUD();player.x=Math.max(0,player.x-130);player.y=ground-player.h-5;player.vy=0;if(lives<=0){finish(false);return}}
+ coinItems.forEach(c=>{if(!c.got&&Math.abs((player.x+player.w/2)-c.x)<24&&Math.abs((player.y+player.h/2)-c.y)<30){c.got=true;coins++;sound("coin");updateHUD()}});
+ blocks.forEach(b=>{if(!b.hit&&player.x+player.w>b.x&&player.x<b.x+b.w&&player.y<b.y+b.h&&player.y+player.h>b.y){b.hit=true;activeQ=b.q;showQuestion(b.q)}});
+ camera=Math.max(0,Math.min(worldW-W,player.x-W*.34));
+ if(player.x>worldW-160&&index>=10){finish(true)}
+}
+function loop(t){let dt=Math.min((t-last)/1000||0,.033);last=t;physics(dt);draw();raf=requestAnimationFrame(loop)}
+function updateHUD(){$("coins").textContent=coins;$("lives").textContent="❤️".repeat(Math.max(0,lives))||"0";$("score").textContent=score;$("progress").textContent=index}
+function makeData(q){let html="<table><thead><tr><th>Item</th><th>Bilangan</th><th>Graf gambar</th></tr></thead><tbody>";q.data.forEach(([name,n])=>{html+=`<tr><td>${name}</td><td>${n}</td><td>${"● ".repeat(n)}</td></tr>`});return html+"</tbody></table>"}
+function showQuestion(i){paused=false;keys.left=keys.right=false;let q=questions[i];$("qnum").textContent=`SOALAN ${i+1}/10`;$("qtitle").textContent=q.title;$("qdata").innerHTML=makeData(q);$("feedback").innerHTML="";$("continueBtn").classList.add("hidden");$("answers").classList.remove("hidden");$("answers").innerHTML="";q.opts.forEach((a,j)=>{let b=document.createElement("button");b.textContent=String.fromCharCode(65+j)+". "+a;b.onclick=()=>answer(j);$("answers").appendChild(b)});$("questionLayer").classList.remove("hidden")}
+function answer(j){if(activeQ<0)return;let q=questions[activeQ],correct=j===q.ans;answered[activeQ]=correct;index++;if(correct){score+=5;sound("good");$("feedback").innerHTML=`<div class="feedback good">⭐ Jawapan betul! +5 markah<br>${q.why}</div>`}else{lives--;sound("bad");$("feedback").innerHTML=`<div class="feedback bad">❌ Belum tepat! −1 nyawa<br>${q.why}</div>`}updateHUD();$("answers").classList.add("hidden");$("continueBtn").classList.remove("hidden");$("continueBtn").textContent=(lives<=0)?"LIHAT KEPUTUSAN":"TERUSKAN ➜";$("continueBtn").onclick=()=>{ $("questionLayer").classList.add("hidden");activeQ=-1;if(lives<=0){finish(false);return}if(index>=10){ // allow travel to castle after all questions
+ player.x=Math.max(player.x,worldW-700); }
+ }; }
+function finish(reached){gameOver=true;cancelAnimationFrame(raf);$("game").classList.add("hidden");$("result").classList.remove("hidden");$("finalScore").textContent=score+"/50";let right=answered.filter(Boolean).length;$("resultDetails").textContent=`${student} · Kelas ${klass} · Jawapan betul ${right}/10 · Syiling ${coins} · Baki nyawa ${lives}. ${reached?"Anda berjaya sampai ke istana!":"Misi tamat. Cuba lagi untuk menambah markah."}`;if(reached)sound("win")}
+function start(){student=$("student").value.trim();klass=$("klass").value;if(!student||!klass){alert("Sila isi nama murid dan pilih kelas dahulu.");return}score=0;coins=0;lives=3;index=0;answered=[];paused=false;activeQ=-1;gameOver=false;makeWorld();$("start").classList.add("hidden");$("result").classList.add("hidden");$("certificateScreen").classList.add("hidden");$("game").classList.remove("hidden");$("questionLayer").classList.add("hidden");updateHUD();last=performance.now();cancelAnimationFrame(raf);raf=requestAnimationFrame(loop);if(audioCtx&&audioCtx.state==="suspended")audioCtx.resume()}
+function setKey(k,v){if(k==="left")keys.left=v;if(k==="right")keys.right=v}
+function jump(){if(!paused&&activeQ<0&&player.onGround){player.vy=-430;player.onGround=false;sound("jump")}}
+document.addEventListener("keydown",e=>{if(["ArrowLeft","ArrowRight","ArrowUp"," ","a","A","d","D"].includes(e.key))e.preventDefault();if(e.key==="ArrowLeft"||e.key.toLowerCase()==="a")keys.left=true;if(e.key==="ArrowRight"||e.key.toLowerCase()==="d")keys.right=true;if(e.key==="ArrowUp"||e.key===" ")jump();if(e.key==="Escape"){$("pauseBtn").click()}});
+document.addEventListener("keyup",e=>{if(e.key==="ArrowLeft"||e.key.toLowerCase()==="a")keys.left=false;if(e.key==="ArrowRight"||e.key.toLowerCase()==="d")keys.right=false});
+function bindHold(id,key){let el=$(id);el.addEventListener("pointerdown",e=>{e.preventDefault();setKey(key,true);el.setPointerCapture?.(e.pointerId)});["pointerup","pointercancel","lostpointercapture"].forEach(ev=>el.addEventListener(ev,()=>setKey(key,false)))}
+bindHold("leftBtn","left");bindHold("rightBtn","right");$("jumpBtn").addEventListener("pointerdown",e=>{e.preventDefault();jump()});
+$("startBtn").onclick=start;$("replayBtn").onclick=()=>{ $("result").classList.add("hidden");$("start").classList.remove("hidden");$("student").value=student;$("klass").value=klass};
+function toggleSound(){muted=!muted;$("soundBtn").textContent=muted?"🔇 Audio: OFF":"🔊 Audio: ON";$("muteBtn").textContent=muted?"🔇 Audio: OFF":"🔊 Audio: ON"}$("soundBtn").onclick=toggleSound;$("muteBtn").onclick=toggleSound;
+$("pauseBtn").onclick=()=>{if(activeQ>=0||gameOver)return;paused=!paused;$("pauseBtn").textContent=paused?"▶ Sambung":"⏸ Jeda";if(paused){ctx.fillStyle="#15375eaa";ctx.fillRect(0,0,W,H);ctx.fillStyle="white";ctx.textAlign="center";ctx.font="bold 42px system-ui";ctx.fillText("DIJEDA",W/2,H/2)}};
+$("makeCert").onclick=()=>{$("result").classList.add("hidden");$("certificateScreen").classList.remove("hidden");$("certName").textContent=student;$("certClass").textContent=klass;$("certScore").textContent=score+"/50";$("certExtras").textContent=`Jawapan betul: ${answered.filter(Boolean).length}/10 · Syiling: ${coins}`;$("certDate").textContent="Tarikh: "+new Intl.DateTimeFormat("ms-MY",{day:"numeric",month:"long",year:"numeric"}).format(new Date())};$("backResult").onclick=()=>{$("certificateScreen").classList.add("hidden");$("result").classList.remove("hidden")};
+makeWorld();draw();
+})();
+</script>
+</body></html>
